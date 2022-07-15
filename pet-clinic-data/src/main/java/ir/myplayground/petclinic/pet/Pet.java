@@ -1,10 +1,11 @@
 package ir.myplayground.petclinic.pet;
 
+import ir.myplayground.petclinic.BaseEntity;
 import ir.myplayground.petclinic.owner.Owner;
 
 import java.time.LocalDate;
 
-public class Pet {
+public class Pet extends BaseEntity {
     private PetType petType;
     private Owner owner;
     private LocalDate birthDate;

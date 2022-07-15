@@ -1,6 +1,8 @@
 package ir.myplayground.petclinic.person;
 
-public class Person {
+import ir.myplayground.petclinic.BaseEntity;
+
+public class Person extends BaseEntity {
     public String firstName;
     public String lastName;
 
