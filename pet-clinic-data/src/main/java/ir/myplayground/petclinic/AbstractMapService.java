@@ -1,13 +1,10 @@
 package ir.myplayground.petclinic;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public abstract class AbstractMapService<T, ID> {
+public abstract class AbstractMapService<T extends BaseEntity, ID extends Long> {
 
-    protected Map<ID, T> map = new HashMap<>();
+    protected Map<Long, T> map = new HashMap<>();
 
     public Set<T> findAll() {
         return new HashSet<>(map.values());
@@ -17,8 +14,16 @@ public abstract class AbstractMapService<T, ID> {
         return map.get(id);
     }
 
-    public T save(ID id, T object) {
-        return map.put(id, object);
+    public T save(T object) {
+        if (object != null) {
+            if (object.getId() == null) {
+                object.setId(getNextId());
+            }
+            map.put(object.getId(), object);
+        } else {
+            throw new RuntimeException("Object cannot be null");
+        }
+        return object;
     }
 
     public void delete(T object) {
@@ -27,5 +32,9 @@ public abstract class AbstractMapService<T, ID> {
 
     public void deleteById(ID id) {
         map.remove(id);
+    }
+
+    private Long getNextId() {
+        return Collections.max(map.keySet()) + 1;
     }
 }
