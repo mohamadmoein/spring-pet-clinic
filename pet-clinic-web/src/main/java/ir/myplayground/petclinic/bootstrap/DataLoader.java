@@ -1,25 +1,35 @@
 package ir.myplayground.petclinic.bootstrap;
 
+import ir.myplayground.petclinic.config.SecretConfigurations;
 import ir.myplayground.petclinic.owner.Owner;
 import ir.myplayground.petclinic.owner.OwnerService;
 import ir.myplayground.petclinic.vet.Vet;
 import ir.myplayground.petclinic.vet.VetService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+@EnableConfigurationProperties(SecretConfigurations.class)
 @Component
 public class DataLoader implements CommandLineRunner {
 
     private final OwnerService ownerService;
     private final VetService vetService;
+    private final String puKey;
+    private final String prKey;
 
-    public DataLoader(OwnerService ownerService, VetService vetService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, SecretConfigurations secretConfigurations) {
         this.ownerService = ownerService;
         this.vetService = vetService;
+        this.puKey = secretConfigurations.getPublicKey();
+        this.prKey = secretConfigurations.getPrivateKey();
     }
 
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("===> Public Key: " + puKey);
+        System.out.println("===> Private Key: " + prKey);
+
         Owner o1 = new Owner();
         o1.setId(1L);
         o1.setFirstName("John");

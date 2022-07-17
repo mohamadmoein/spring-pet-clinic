@@ -2,5 +2,7 @@ spring:
   config:
     activate:
       on-profile: dev
-secret:
-  key: MyDevKey
+petclinic:
+  secret:
+    public-key: MyDevelopmentPublicKey
+    private-key: MyDevelopmentPrivateKey
