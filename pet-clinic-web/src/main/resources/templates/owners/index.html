@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <title>Pet Clinic - List of Owners</title>
 </head>
-<body>
+<body dir="ltr">
     <div>
         <h1 th:text="'List of Owners'">List of Owners ...</h1>
+        <div th:each="owner: ${owners}" style="border: 1px solid black; border-radius: 10px; padding: 10px; margin: 4px">
+            <p th:text="${owner.id}">-</p>
+            <p th:text="${owner.firstName}">-</p>
+            <p th:text="${owner.lastName}">-</p>
+        </div>
     </div>
 </body>
 </html>
