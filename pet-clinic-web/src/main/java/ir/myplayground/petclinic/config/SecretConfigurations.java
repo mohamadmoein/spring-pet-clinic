@@ -5,12 +5,4 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties("petclinic.secret")
-public record SecretConfigurations(String publicKey, String privateKey) {
-    public String getPublicKey() {
-        return publicKey;
-    }
-
-    public String getPrivateKey() {
-        return privateKey;
-    }
-}
+public record SecretConfigurations(String publicKey, String privateKey) { }

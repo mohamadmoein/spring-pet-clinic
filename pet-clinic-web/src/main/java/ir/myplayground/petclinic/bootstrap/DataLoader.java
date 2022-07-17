@@ -21,8 +21,8 @@ public class DataLoader implements CommandLineRunner {
     public DataLoader(OwnerService ownerService, VetService vetService, SecretConfigurations secretConfigurations) {
         this.ownerService = ownerService;
         this.vetService = vetService;
-        this.puKey = secretConfigurations.getPublicKey();
-        this.prKey = secretConfigurations.getPrivateKey();
+        this.puKey = secretConfigurations.publicKey();
+        this.prKey = secretConfigurations.privateKey();
     }
 
     @Override
