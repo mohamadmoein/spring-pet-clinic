@@ -3,6 +3,8 @@ package ir.myplayground.petclinic.bootstrap;
 import ir.myplayground.petclinic.config.SecretConfigurations;
 import ir.myplayground.petclinic.owner.Owner;
 import ir.myplayground.petclinic.owner.OwnerService;
+import ir.myplayground.petclinic.pet.PetType;
+import ir.myplayground.petclinic.pet.PetTypeService;
 import ir.myplayground.petclinic.vet.Vet;
 import ir.myplayground.petclinic.vet.VetService;
 import org.springframework.boot.CommandLineRunner;
@@ -15,12 +17,14 @@ public class DataLoader implements CommandLineRunner {
 
     private final OwnerService ownerService;
     private final VetService vetService;
+    private final PetTypeService petTypeService;
     private final String puKey;
     private final String prKey;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, SecretConfigurations secretConfigurations) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SecretConfigurations secretConfigurations) {
         this.ownerService = ownerService;
         this.vetService = vetService;
+        this.petTypeService = petTypeService;
         this.puKey = secretConfigurations.publicKey();
         this.prKey = secretConfigurations.privateKey();
     }
@@ -29,6 +33,16 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("===> Public Key: " + puKey);
         System.out.println("===> Private Key: " + prKey);
+
+        PetType dog = new PetType();
+        dog.setId(1L);
+        dog.setName("Dog");
+        petTypeService.save(dog);
+
+        PetType cat = new PetType();
+        cat.setId(2L);
+        cat.setName("Cat");
+        petTypeService.save(cat);
 
         Owner o1 = new Owner();
         o1.setId(1L);
