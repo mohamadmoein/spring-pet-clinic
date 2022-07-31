@@ -6,6 +6,8 @@ import ir.myplayground.petclinic.owner.OwnerService;
 import ir.myplayground.petclinic.pet.Pet;
 import ir.myplayground.petclinic.pet.PetType;
 import ir.myplayground.petclinic.pet.PetTypeService;
+import ir.myplayground.petclinic.vet.Specialty;
+import ir.myplayground.petclinic.vet.SpecialtyService;
 import ir.myplayground.petclinic.vet.Vet;
 import ir.myplayground.petclinic.vet.VetService;
 import org.springframework.boot.CommandLineRunner;
@@ -21,13 +23,15 @@ public class DataLoader implements CommandLineRunner {
     private final OwnerService ownerService;
     private final VetService vetService;
     private final PetTypeService petTypeService;
+    private final SpecialtyService specialtyService;
     private final String puKey;
     private final String prKey;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SecretConfigurations secretConfigurations) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService, SecretConfigurations secretConfigurations) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
+        this.specialtyService = specialtyService;
         this.puKey = secretConfigurations.publicKey();
         this.prKey = secretConfigurations.privateKey();
     }
@@ -37,6 +41,11 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("===> Public Key: " + puKey);
         System.out.println("===> Private Key: " + prKey);
 
+        int count = petTypeService.findAll().size();
+        if (count == 0) loadData();
+    }
+
+    private void loadData() {
         PetType dog = new PetType();
         dog.setId(1L);
         dog.setName("Dog");
@@ -47,6 +56,21 @@ public class DataLoader implements CommandLineRunner {
         cat.setName("Cat");
         PetType catPetType = petTypeService.save(cat);
 
+        Specialty radiology = new Specialty();
+        radiology.setId(1L);
+        radiology.setName("Radiology");
+        Specialty s1 = specialtyService.save(radiology);
+
+        Specialty surgery = new Specialty();
+        surgery.setId(2L);
+        surgery.setName("Surgery");
+        Specialty s2 = specialtyService.save(surgery);
+
+        Specialty dentistry = new Specialty();
+        dentistry.setId(3L);
+        dentistry.setName("Dentistry");
+        Specialty s3 = specialtyService.save(dentistry);
+
         Owner o1 = new Owner();
         o1.setId(1L);
         o1.setFirstName("John");
@@ -54,7 +78,7 @@ public class DataLoader implements CommandLineRunner {
         o1.setAddress("Tehran, something here, and here ");
         o1.setCity("Tehran");
         o1.setTelephone("123456789");
-        ownerService.save(o1);
+        ownerService.saveWithPet(o1);
 
         Pet pet1 = new Pet();
         pet1.setId(1L);
@@ -71,12 +95,12 @@ public class DataLoader implements CommandLineRunner {
         o2.setAddress("Qom, something here, and here ");
         o2.setCity("Qom");
         o2.setTelephone("567823567");
-        ownerService.save(o2);
+        ownerService.saveWithPet(o2);
 
         Pet pet2 = new Pet();
         pet2.setId(2L);
         pet2.setName("Lindo");
-        pet2.setPetType(dogPetType);
+        pet2.setPetType(catPetType);
         pet2.setOwner(o2);
         pet2.setBirthDate(LocalDate.now());
         o2.getPets().add(pet2);
@@ -85,13 +109,16 @@ public class DataLoader implements CommandLineRunner {
         v1.setId(1L);
         v1.setFirstName("Johhhhhhn");
         v1.setLastName("Doooooe");
-        vetService.save(v1);
+        vetService.saveWithSpecialties(v1);
+        v1.getSpecialties().add(s1);
+        v1.getSpecialties().add(s2);
 
         Vet v2 = new Vet();
         v2.setId(2L);
         v2.setFirstName("Jannnnnne");
         v2.setLastName("Dooooooe");
-        vetService.save(v2);
+        vetService.saveWithSpecialties(v2);
+        v2.getSpecialties().add(s3);
 
         System.out.println("===> Loaded Data.");
     }
